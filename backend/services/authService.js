@@ -53,5 +53,11 @@ export const getUserProfile = async (userId) => {
   if (!user) {
     throw new ApiError(404, 'User not found');
   }
-  return user;
+
+  return {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    role: user.role,
+  };
 };
