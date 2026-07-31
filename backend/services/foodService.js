@@ -34,9 +34,9 @@ export const createFood = async (data) => {
   if (!categoryExists) {
     throw new ApiError(400, 'Referenced category does not exist');
   }
-  return Food.create(data);
+  const food = await Food.create(data);
+  return food.populate('category', 'name image');
 };
-
 export const updateFood = async (id, data) => {
   if (data.category) {
     const categoryExists = await Category.findById(data.category);

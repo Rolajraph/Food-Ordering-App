@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import authRoutes from './authRoutes.js';
+import categoryRoutes from './categoryRoutes.js';
+import foodRoutes from './foodRoutes.js';
 
 const router = Router();
 
@@ -8,10 +10,9 @@ router.get('/', (req, res) => {
 });
 
 router.use('/auth', authRoutes);
+router.use('/categories', categoryRoutes);
+router.use('/foods', foodRoutes);
 
-// Future resource routers mount here:
-// router.use('/foods', foodRoutes);
-// router.use('/categories', categoryRoutes);
-// router.use('/orders', orderRoutes);
+
 
 export default router;
