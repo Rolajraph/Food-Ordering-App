@@ -1,8 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
+import useCart from '../../hooks/useCart';
 
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
+  const { itemCount } = useCart();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -13,9 +15,10 @@ const Navbar = () => {
   return (
     <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', borderBottom: '1px solid #e5e5e5' }}>
       <Link to="/">Food Ordering App</Link>
-      <Link to="/menu">Menu</Link>
 
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+        <Link to="/menu">Menu</Link>
+        <Link to="/cart">Cart ({itemCount})</Link>
         {isAuthenticated ? (
           <>
             <span>Hi, {user.name}</span>

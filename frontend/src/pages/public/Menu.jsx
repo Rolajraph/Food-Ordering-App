@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
 import { getFoodsRequest } from '../../api/foodApi';
+import useCart from '../../hooks/useCart';
 
 const Menu = () => {
   const [foods, setFoods] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
+  const { addItem } = useCart();
 
   useEffect(() => {
     const fetchFoods = async () => {
@@ -41,6 +43,9 @@ const Menu = () => {
               <p>${food.price.toFixed(2)}</p>
               <p style={{ fontSize: '0.85rem', color: '#666' }}>{food.category.name}</p>
               {!food.isAvailable && <p style={{ color: 'red' }}>Currently unavailable</p>}
+              <button onClick={() => addItem(food)} disabled={!food.isAvailable}>
+                Add to Cart
+              </button>
             </div>
           ))}
         </div>
