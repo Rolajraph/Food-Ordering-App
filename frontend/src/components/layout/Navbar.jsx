@@ -13,6 +13,7 @@ const Navbar = () => {
   return (
     <nav style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem', borderBottom: '1px solid #e5e5e5' }}>
       <Link to="/">Food Ordering App</Link>
+      <Link to="/menu">Menu</Link>
 
       <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
         {isAuthenticated ? (
