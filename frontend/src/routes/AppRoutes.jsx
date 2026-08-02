@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import PublicLayout from '../layouts/PublicLayout';
+import AdminLayout from '../layouts/AdminLayout';
 import ProtectedRoute from './ProtectedRoute';
+import AdminRoute from './AdminRoute';
 import Login from '../pages/public/Login';
 import Register from '../pages/public/Register';
 import Menu from '../pages/public/Menu';
@@ -22,6 +24,12 @@ const AppRoutes = () => {
         <Route element={<ProtectedRoute />}>
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        </Route>
+      </Route>
+
+      <Route element={<AdminRoute />}>
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<h1>Admin Dashboard (placeholder)</h1>} />
         </Route>
       </Route>
     </Routes>
