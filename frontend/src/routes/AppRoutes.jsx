@@ -1,9 +1,12 @@
 import { Routes, Route } from 'react-router-dom';
 import PublicLayout from '../layouts/PublicLayout';
+import ProtectedRoute from './ProtectedRoute';
 import Login from '../pages/public/Login';
 import Register from '../pages/public/Register';
 import Menu from '../pages/public/Menu';
 import Cart from '../pages/public/Cart';
+import Checkout from '../pages/public/Checkout';
+import OrderConfirmation from '../pages/public/OrderConfirmation';
 import App from '../App';
 
 const AppRoutes = () => {
@@ -15,6 +18,11 @@ const AppRoutes = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/cart" element={<Cart />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        </Route>
       </Route>
     </Routes>
   );
