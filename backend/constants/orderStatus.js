@@ -18,4 +18,5 @@ export const ALLOWED_TRANSITIONS = Object.freeze({
 export const PAYMENT_METHODS = Object.freeze({
   COD: 'cash_on_delivery',
   CARD: 'card',
+  BANK_TRANSFER: 'bank_transfer',
 });
