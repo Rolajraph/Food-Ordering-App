@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useCart from "../../hooks/useCart";
 import { createOrderRequest } from "../../api/orderApi";
+import { formatCurrency } from '../../utils/formatCurrency';
 
 const Checkout = () => {
   const { items, subtotal, clearCart } = useCart();
@@ -58,10 +59,10 @@ const Checkout = () => {
         <h2>Order Summary</h2>
         {items.map(({ food, quantity }) => (
           <p key={food._id}>
-            {food.name} × {quantity} — ${(food.price * quantity).toFixed(2)}
+            {food.name} × {quantity} — {formatCurrency(food.price * quantity)}
           </p>
         ))}
-        <h3>Total: ${subtotal.toFixed(2)}</h3>
+        <h3>Total: {formatCurrency(subtotal)}</h3>
       </div>
 
       <form onSubmit={handleSubmit}>

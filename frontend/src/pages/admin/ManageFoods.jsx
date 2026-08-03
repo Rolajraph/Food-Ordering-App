@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getFoodsRequest, createFoodRequest, deleteFoodRequest, updateFoodRequest } from '../../api/foodApi';
 import { getCategoriesRequest } from '../../api/categoryApi';
+import { formatCurrency } from '../../utils/formatCurrency';
 
 const initialFormState = {
   name: '',
@@ -139,7 +140,7 @@ const ManageFoods = () => {
             <tr key={food._id}>
               <td>{food.name}</td>
               <td>{food.category.name}</td>
-              <td>${food.price.toFixed(2)}</td>
+              <td>{formatCurrency(food.price)}</td>
               <td>
                 <button onClick={() => handleToggleAvailability(food)}>
                   {food.isAvailable ? 'Available' : 'Unavailable'}

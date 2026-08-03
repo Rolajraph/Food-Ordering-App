@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { getAllOrdersRequest, updateOrderStatusRequest } from '../../api/orderApi';
+import { formatCurrency } from '../../utils/formatCurrency';
 
 // Mirrors backend/constants/orderStatus.js — keep in sync if backend changes
 const ALLOWED_TRANSITIONS = {
@@ -74,7 +75,7 @@ const ManageOrders = () => {
                     <div key={item.food}>{item.name} × {item.quantity}</div>
                   ))}
                 </td>
-                <td>${order.totalAmount.toFixed(2)}</td>
+                <td>{formatCurrency(order.totalAmount)}</td>
                 <td>{order.status}</td>
                 <td>
                   {nextOptions.length === 0 ? (

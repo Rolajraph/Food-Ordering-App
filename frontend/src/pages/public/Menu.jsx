@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getFoodsRequest } from '../../api/foodApi';
 import useCart from '../../hooks/useCart';
-
+import { formatCurrency } from '../../utils/formatCurrency';
 const Menu = () => {
   const [foods, setFoods] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -40,7 +40,7 @@ const Menu = () => {
               <img src={food.image} alt={food.name} style={{ width: '100%', height: '120px', objectFit: 'cover' }} />
               <h3>{food.name}</h3>
               <p>{food.description}</p>
-              <p>${food.price.toFixed(2)}</p>
+              <p>{formatCurrency(food.price)}</p>
               <p style={{ fontSize: '0.85rem', color: '#666' }}>{food.category.name}</p>
               {!food.isAvailable && <p style={{ color: 'red' }}>Currently unavailable</p>}
               <button onClick={() => addItem(food)} disabled={!food.isAvailable}>

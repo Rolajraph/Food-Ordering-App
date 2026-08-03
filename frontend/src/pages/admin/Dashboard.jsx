@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getAllOrdersRequest } from '../../api/orderApi';
 import { getFoodsRequest } from '../../api/foodApi';
 import { getUsersRequest } from '../../api/authApi';
+import { formatCurrency } from '../../utils/formatCurrency';
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
@@ -60,7 +61,7 @@ const Dashboard = () => {
         </div>
         <div style={{ border: '1px solid #e5e5e5', padding: '1rem', flex: 1 }}>
           <h3>Total Revenue</h3>
-          <p style={{ fontSize: '1.5rem' }}>${stats.totalRevenue.toFixed(2)}</p>
+          <p style={{ fontSize: '1.5rem' }}>{formatCurrency(stats.totalRevenue)}</p>
         </div>
         <div style={{ border: '1px solid #e5e5e5', padding: '1rem', flex: 1 }}>
           <h3>Total Customers</h3>
@@ -89,7 +90,7 @@ const Dashboard = () => {
             {recentOrders.map((order) => (
               <tr key={order._id}>
                 <td>{order.customer.name}</td>
-                <td>${order.totalAmount.toFixed(2)}</td>
+                <td>{formatCurrency(order.totalAmount)}</td>
                 <td>{order.status}</td>
                 <td>{new Date(order.createdAt).toLocaleDateString()}</td>
               </tr>
