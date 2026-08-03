@@ -11,3 +11,11 @@ export const getMyOrdersRequest = () => {
 export const getOrderByIdRequest = (id) => {
   return axiosInstance.get(`/orders/${id}`);
 };
+
+export const getAllOrdersRequest = () => {
+  return axiosInstance.get('/orders');
+};
+
+export const updateOrderStatusRequest = (id, status) => {
+  return axiosInstance.patch(`/orders/${id}/status`, { status });
+};

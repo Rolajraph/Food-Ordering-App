@@ -1,0 +1,107 @@
+import { useState, useEffect } from 'react';
+import { getAllOrdersRequest, updateOrderStatusRequest } from '../../api/orderApi';
+
+// Mirrors backend/constants/orderStatus.js — keep in sync if backend changes
+const ALLOWED_TRANSITIONS = {
+  pending: ['preparing', 'cancelled'],
+  preparing: ['on_the_way', 'cancelled'],
+  on_the_way: ['delivered'],
+  delivered: [],
+  cancelled: [],
+};
+
+const ManageOrders = () => {
+  const [orders, setOrders] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [updatingId, setUpdatingId] = useState(null);
+
+  const loadOrders = async () => {
+    setIsLoading(true);
+    setError('');
+    try {
+      const response = await getAllOrdersRequest();
+      setOrders(response.data.data.orders);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to load orders.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadOrders();
+  }, []);
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    setUpdatingId(orderId);
+    try {
+      await updateOrderStatusRequest(orderId, newStatus);
+      await loadOrders();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to update order status.');
+    } finally {
+      setUpdatingId(null);
+    }
+  };
+
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+
+  return (
+    <div>
+      <h1>Manage Orders</h1>
+      <p>{orders.length} total orders</p>
+
+      <table border="1" cellPadding="8" style={{ borderCollapse: 'collapse', width: '100%' }}>
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Update Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orders.map((order) => {
+            const nextOptions = ALLOWED_TRANSITIONS[order.status] || [];
+            return (
+              <tr key={order._id}>
+                <td>{order.customer.name}<br /><small>{order.customer.email}</small></td>
+                <td>
+                  {order.items.map((item) => (
+                    <div key={item.food}>{item.name} × {item.quantity}</div>
+                  ))}
+                </td>
+                <td>${order.totalAmount.toFixed(2)}</td>
+                <td>{order.status}</td>
+                <td>
+                  {nextOptions.length === 0 ? (
+                    <span>—</span>
+                  ) : (
+                    <select
+                      defaultValue=""
+                      disabled={updatingId === order._id}
+                      onChange={(e) => {
+                        if (e.target.value) handleStatusChange(order._id, e.target.value);
+                      }}
+                    >
+                      <option value="" disabled>Change to...</option>
+                      {nextOptions.map((status) => (
+                        <option key={status} value={status}>{status}</option>
+                      ))}
+                    </select>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+
+export default ManageOrders;

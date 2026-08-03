@@ -11,6 +11,7 @@ import Checkout from '../pages/public/Checkout';
 import OrderConfirmation from '../pages/public/OrderConfirmation';
 import ManageFoods from '../pages/admin/ManageFoods';
 import ManageCategories from '../pages/admin/ManageCategories';
+import ManageOrders from '../pages/admin/ManageOrders';
 import App from '../App';
 
 const AppRoutes = () => {
@@ -34,8 +35,10 @@ const AppRoutes = () => {
           <Route path="/admin" element={<h1>Admin Dashboard (placeholder)</h1>} />
           <Route path="/admin/foods" element={<ManageFoods />} />
           <Route path="/admin/categories" element={<ManageCategories />} />
+          <Route path="/admin/orders" element={<ManageOrders />} />
         </Route>
       </Route>
+      
     </Routes>
   );
 };
