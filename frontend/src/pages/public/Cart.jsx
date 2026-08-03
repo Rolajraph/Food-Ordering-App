@@ -1,55 +1,49 @@
 import { Link } from 'react-router-dom';
 import useCart from '../../hooks/useCart';
 import { formatCurrency } from '../../utils/formatCurrency';
+import './Cart.css';
 
 const Cart = () => {
   const { items, removeItem, updateQuantity, subtotal } = useCart();
 
   if (items.length === 0) {
     return (
-      <div>
-        <h1>Your Cart</h1>
-        <p>Your cart is empty.</p>
-        <Link to="/menu">Browse the menu</Link>
+      <div className="cart-page">
+        <h1 className="brush-underline">Your Cart</h1>
+        <div className="cart-page__empty">
+          <p>Your cart is empty.</p>
+          <Link to="/menu">Browse the menu</Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div>
-      <h1>Your Cart</h1>
+    <div className="cart-page">
+      <h1 className="brush-underline">Your Cart</h1>
       <div>
         {items.map(({ food, quantity }) => (
-          <div
-            key={food._id}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '1rem',
-              borderBottom: '1px solid #e5e5e5',
-              padding: '1rem 0',
-            }}
-          >
-            <img src={food.image} alt={food.name} style={{ width: '80px', height: '80px', objectFit: 'cover' }} />
-            <div style={{ flex: 1 }}>
-              <h3>{food.name}</h3>
-              <p>{formatCurrency(food.price)} each</p>
+          <div className="cart-item" key={food._id}>
+            <img src={food.image} alt={food.name} className="cart-item__image" />
+            <div className="cart-item__info">
+              <p className="cart-item__name">{food.name}</p>
+              <p className="cart-item__unit-price">{formatCurrency(food.price)} each</p>
             </div>
-            <div>
-              <button onClick={() => updateQuantity(food._id, quantity - 1)}>-</button>
-              <span style={{ margin: '0 0.5rem' }}>{quantity}</span>
-              <button onClick={() => updateQuantity(food._id, quantity + 1)}>+</button>
+            <div className="cart-item__qty">
+              <button className="cart-item__qty-btn" onClick={() => updateQuantity(food._id, quantity - 1)}>-</button>
+              <span>{quantity}</span>
+              <button className="cart-item__qty-btn" onClick={() => updateQuantity(food._id, quantity + 1)}>+</button>
             </div>
-            <p>{formatCurrency(food.price * quantity)}</p>
-            <button onClick={() => removeItem(food._id)}>Remove</button>
+            <p className="cart-item__line-total">{formatCurrency(food.price * quantity)}</p>
+            <button className="cart-item__remove" onClick={() => removeItem(food._id)}>Remove</button>
           </div>
         ))}
       </div>
 
-      <div style={{ marginTop: '1rem', textAlign: 'right' }}>
-        <h2>Subtotal: {formatCurrency(subtotal)}</h2>
+      <div className="cart-page__summary">
+        <h2 className="cart-page__subtotal">Subtotal: {formatCurrency(subtotal)}</h2>
         <Link to="/checkout">
-          <button>Proceed to Checkout</button>
+          <button className="cart-page__checkout-btn">Proceed to Checkout</button>
         </Link>
       </div>
     </div>
