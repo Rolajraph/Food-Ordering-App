@@ -1,0 +1,106 @@
+.auth-page {
+  max-width: 420px;
+  margin: var(--space-12) auto;
+  padding: var(--space-8);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.auth-page h1 {
+  margin-bottom: var(--space-6);
+}
+
+.form-field {
+  margin-bottom: var(--space-4);
+}
+
+.form-field label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  margin-bottom: var(--space-1);
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-base);
+  background: var(--color-bg);
+  transition: border-color 0.15s ease;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+}
+
+.form-error {
+  color: var(--color-danger);
+  background: var(--color-danger-tint);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-4);
+}
+
+.form-submit-btn {
+  width: 100%;
+  padding: var(--space-3);
+  background: var(--color-primary);
+  color: var(--color-surface);
+  font-weight: 600;
+  font-size: var(--text-base);
+  border-radius: var(--radius-sm);
+  transition: background 0.15s ease;
+}
+
+.form-submit-btn:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.form-submit-btn:disabled {
+  background: var(--color-border);
+  color: var(--color-muted);
+  cursor: not-allowed;
+}
+
+.auth-page__footer {
+  margin-top: var(--space-4);
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+}
+
+.auth-page__footer a {
+  color: var(--color-primary);
+  font-weight: 600;
+}
+
+.form-field--password {
+  position: relative;
+}
+
+.form-field--password input {
+  padding-right: 44px;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: var(--space-3);
+  top: 34px;
+  font-size: var(--text-sm);
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.password-toggle-btn:hover {
+  color: var(--color-primary);
+}
