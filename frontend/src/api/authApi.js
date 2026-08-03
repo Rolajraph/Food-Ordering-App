@@ -11,3 +11,7 @@ export const loginRequest = (data) => {
 export const getProfileRequest = () => {
   return axiosInstance.get('/auth/profile');
 };
+
+export const getUsersRequest = () => {
+  return axiosInstance.get('/auth/users');
+};

@@ -13,6 +13,7 @@ import ManageFoods from '../pages/admin/ManageFoods';
 import ManageCategories from '../pages/admin/ManageCategories';
 import ManageOrders from '../pages/admin/ManageOrders';
 import App from '../App';
+import Dashboard from '../pages/admin/Dashboard';
 
 const AppRoutes = () => {
   return (
@@ -32,10 +33,10 @@ const AppRoutes = () => {
 
       <Route element={<AdminRoute />}>
         <Route element={<AdminLayout />}>
-          <Route path="/admin" element={<h1>Admin Dashboard (placeholder)</h1>} />
           <Route path="/admin/foods" element={<ManageFoods />} />
           <Route path="/admin/categories" element={<ManageCategories />} />
           <Route path="/admin/orders" element={<ManageOrders />} />
+          <Route path="/admin" element={<Dashboard />} />
         </Route>
       </Route>
       
