@@ -1,5 +1,13 @@
 import { useLocation, Link, Navigate } from 'react-router-dom';
 import { formatCurrency } from '../../utils/formatCurrency';
+import './OrderConfirmation.css';
+
+
+const paymentMethodLabels = {
+  cash_on_delivery: 'Cash on Delivery',
+  card: 'Card',
+  bank_transfer: 'Bank Transfer',
+};
 
 const OrderConfirmation = () => {
   const location = useLocation();
@@ -10,20 +18,29 @@ const OrderConfirmation = () => {
   }
 
   return (
-    <div>
-      <h1>Order Placed Successfully!</h1>
-      <p>Order ID: {order._id}</p>
-      <p>Status: {order.status}</p>
-      <h2>Items</h2>
-      {order.items.map((item) => (
-        <p key={item.food}>
-          {item.name} × {item.quantity} — {formatCurrency(item.price * item.quantity)}
-        </p>
-      ))}
-      <h3>Total: {formatCurrency(order.totalAmount)}</h3>
-      <p>Delivery Address: {order.deliveryAddress}</p>
-      <p>Payment Method: {order.paymentMethod}</p>
-      <Link to="/menu">Continue Shopping</Link>
+    <div className="confirmation-page">
+      <div className="confirmation-page__icon">✓</div>
+      <h1 className="brush-underline">Order Placed!</h1>
+      <p className="confirmation-page__meta">Order ID: {order._id} · Status: {order.status}</p>
+
+      <div className="confirmation-card">
+        {order.items.map((item) => (
+          <div className="confirmation-card__line" key={item.food}>
+            <span>{item.name} × {item.quantity}</span>
+            <span>{formatCurrency(item.price * item.quantity)}</span>
+          </div>
+        ))}
+        <div className="confirmation-card__total">
+          <span>Total</span>
+          <span>{formatCurrency(order.totalAmount)}</span>
+        </div>
+        <div className="confirmation-card__details">
+          <p>Delivery Address: {order.deliveryAddress}</p>
+          <p>Payment Method: {paymentMethodLabels[order.paymentMethod] || order.paymentMethod}</p>
+        </div>
+      </div>
+
+      <Link to="/menu" className="confirmation-page__link">Continue Shopping</Link>
     </div>
   );
 };
