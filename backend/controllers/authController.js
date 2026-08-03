@@ -28,3 +28,10 @@ export const getProfile = async (req, res) => {
     data: { user },
   });
 };
+
+export const getUsers = async (req, res) => {
+  const users = await authService.getAllUsers();
+  res.status(200).json({
+     success: true, results: users.length, data: { users },
+ });
+};

@@ -61,3 +61,7 @@ export const getUserProfile = async (userId) => {
     role: user.role,
   };
 };
+
+export const getAllUsers = async () => {
+  return User.find().select('-password').sort({ createdAt: -1 });
+};
