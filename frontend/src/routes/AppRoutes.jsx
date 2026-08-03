@@ -9,6 +9,7 @@ import Menu from '../pages/public/Menu';
 import Cart from '../pages/public/Cart';
 import Checkout from '../pages/public/Checkout';
 import OrderConfirmation from '../pages/public/OrderConfirmation';
+import ManageFoods from '../pages/admin/ManageFoods';
 import App from '../App';
 
 const AppRoutes = () => {
@@ -30,6 +31,7 @@ const AppRoutes = () => {
       <Route element={<AdminRoute />}>
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<h1>Admin Dashboard (placeholder)</h1>} />
+          <Route path="/admin/foods" element={<ManageFoods />} />
         </Route>
       </Route>
     </Routes>
