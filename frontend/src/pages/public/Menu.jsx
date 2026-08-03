@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { getFoodsRequest } from '../../api/foodApi';
 import useCart from '../../hooks/useCart';
 import { formatCurrency } from '../../utils/formatCurrency';
+import './Menu.css';
+
 const Menu = () => {
   const [foods, setFoods] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,23 +31,29 @@ const Menu = () => {
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
-    <div>
-      <h1>Menu</h1>
+    <div className="menu">
+      <h1 className="brush-underline">Menu</h1>
       {foods.length === 0 ? (
         <p>No food items available right now.</p>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+        <div className="menu__grid">
           {foods.map((food) => (
-            <div key={food._id} style={{ border: '1px solid #e5e5e5', padding: '1rem', borderRadius: '4px' }}>
-              <img src={food.image} alt={food.name} style={{ width: '100%', height: '120px', objectFit: 'cover' }} />
-              <h3>{food.name}</h3>
-              <p>{food.description}</p>
-              <p>{formatCurrency(food.price)}</p>
-              <p style={{ fontSize: '0.85rem', color: '#666' }}>{food.category.name}</p>
-              {!food.isAvailable && <p style={{ color: 'red' }}>Currently unavailable</p>}
-              <button onClick={() => addItem(food)} disabled={!food.isAvailable}>
-                Add to Cart
-              </button>
+            <div className="food-card" key={food._id}>
+              <img src={food.image} alt={food.name} className="food-card__image" />
+              <div className="food-card__body">
+                <span className="food-card__category">{food.category.name}</span>
+                <h3 className="food-card__name">{food.name}</h3>
+                <p className="food-card__description">{food.description}</p>
+                <p className="food-card__price">{formatCurrency(food.price)}</p>
+                {!food.isAvailable && <p className="food-card__unavailable">Currently unavailable</p>}
+                <button
+                  onClick={() => addItem(food)}
+                  disabled={!food.isAvailable}
+                  className="food-card__btn"
+                >
+                  Add to Cart
+                </button>
+              </div>
             </div>
           ))}
         </div>
