@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
 import useCart from '../../hooks/useCart';
+import logo from '../../assets/logo/quickbite-logo.png';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -15,7 +16,9 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <Link to="/" className="navbar__brand">Food Ordering App</Link>
+      <Link to="/" className="navbar__brand">
+        <img src={logo} alt="QuickBite" className="navbar__logo" />
+      </Link>
 
       <div className="navbar__links">
         <Link to="/menu" className="navbar__link">Menu</Link>

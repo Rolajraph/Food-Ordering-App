@@ -72,3 +72,8 @@
   background: var(--color-primary);
   color: var(--color-surface);
 }
+
+.navbar__logo {
+  height: 28px;
+  width: auto;
+}
