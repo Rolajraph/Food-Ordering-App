@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { getFoodsRequest, createFoodRequest, deleteFoodRequest, updateFoodRequest } from '../../api/foodApi';
 import { getCategoriesRequest } from '../../api/categoryApi';
 import { formatCurrency } from '../../utils/formatCurrency';
+import '../../styles/admin.css';
+
 
 const initialFormState = {
   name: '',
@@ -92,48 +94,41 @@ const ManageFoods = () => {
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
-    <div>
-      <h1>Manage Foods</h1>
+  <div className="admin-page">
+    <h1>Manage Foods</h1>
 
-      <h2>Add New Food</h2>
-      <form onSubmit={handleCreate}>
-        <div>
-          <label htmlFor="name">Name</label>
-          <input id="name" name="name" value={formData.name} onChange={handleChange} required />
-        </div>
-        <div>
-          <label htmlFor="description">Description</label>
-          <textarea id="description" name="description" value={formData.description} onChange={handleChange} required />
-        </div>
-        <div>
-          <label htmlFor="price">Price</label>
-          <input id="price" name="price" type="number" step="0.01" min="0" value={formData.price} onChange={handleChange} required />
-        </div>
-        <div>
-          <label htmlFor="category">Category</label>
-          <select id="category" name="category" value={formData.category} onChange={handleChange} required>
-            <option value="">Select a category</option>
-            {categories.map((cat) => (
-              <option key={cat._id} value={cat._id}>{cat.name}</option>
-            ))}
-          </select>
-        </div>
-        {formError && <p style={{ color: 'red' }}>{formError}</p>}
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Adding...' : 'Add Food'}
-        </button>
-      </form>
+    <h2>Add New Food</h2>
+    <form onSubmit={handleCreate} className="admin-form">
+      <div className="form-field">
+        <label htmlFor="name">Name</label>
+        <input id="name" name="name" value={formData.name} onChange={handleChange} required />
+      </div>
+      <div className="form-field">
+        <label htmlFor="description">Description</label>
+        <textarea id="description" name="description" value={formData.description} onChange={handleChange} required />
+      </div>
+      <div className="form-field">
+        <label htmlFor="price">Price</label>
+        <input id="price" name="price" type="number" step="0.01" min="0" value={formData.price} onChange={handleChange} required />
+      </div>
+      <div className="form-field">
+        <label htmlFor="category">Category</label>
+        <select id="category" name="category" value={formData.category} onChange={handleChange} required>
+          <option value="">Select a category</option>
+          {categories.map((cat) => <option key={cat._id} value={cat._id}>{cat.name}</option>)}
+        </select>
+      </div>
+      {formError && <p className="form-error">{formError}</p>}
+      <button type="submit" disabled={isSubmitting} className="form-submit-btn">
+        {isSubmitting ? 'Adding...' : 'Add Food'}
+      </button>
+    </form>
 
-      <h2>Existing Foods ({foods.length})</h2>
-      <table border="1" cellPadding="8" style={{ borderCollapse: 'collapse', width: '100%' }}>
+    <h2>Existing Foods ({foods.length})</h2>
+    <div className="admin-table-wrap">
+      <table className="admin-table">
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Price</th>
-            <th>Available</th>
-            <th>Actions</th>
-          </tr>
+          <tr><th>Name</th><th>Category</th><th>Price</th><th>Available</th><th>Actions</th></tr>
         </thead>
         <tbody>
           {foods.map((food) => (
@@ -142,18 +137,22 @@ const ManageFoods = () => {
               <td>{food.category.name}</td>
               <td>{formatCurrency(food.price)}</td>
               <td>
-                <button onClick={() => handleToggleAvailability(food)}>
+                <button
+                  onClick={() => handleToggleAvailability(food)}
+                  className={`admin-badge ${food.isAvailable ? 'admin-badge--available' : 'admin-badge--unavailable'}`}
+                >
                   {food.isAvailable ? 'Available' : 'Unavailable'}
                 </button>
               </td>
               <td>
-                <button onClick={() => handleDelete(food._id)}>Delete</button>
+                <button onClick={() => handleDelete(food._id)} className="admin-btn admin-btn--danger">Delete</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
+  </div>
   );
 };
 

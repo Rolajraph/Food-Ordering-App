@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { getAllOrdersRequest, updateOrderStatusRequest } from '../../api/orderApi';
 import { formatCurrency } from '../../utils/formatCurrency';
+import '../../styles/forms.css';
+import '../../styles/admin.css';
 
 // Mirrors backend/constants/orderStatus.js — keep in sync if backend changes
 const ALLOWED_TRANSITIONS = {
@@ -50,48 +52,34 @@ const ManageOrders = () => {
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
-    <div>
-      <h1>Manage Orders</h1>
-      <p>{orders.length} total orders</p>
+  <div className="admin-page">
+    <h1>Manage Orders</h1>
+    <p>{orders.length} total orders</p>
 
-      <table border="1" cellPadding="8" style={{ borderCollapse: 'collapse', width: '100%' }}>
+    <div className="admin-table-wrap">
+      <table className="admin-table">
         <thead>
-          <tr>
-            <th>Customer</th>
-            <th>Items</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Update Status</th>
-          </tr>
+          <tr><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Update Status</th></tr>
         </thead>
         <tbody>
           {orders.map((order) => {
             const nextOptions = ALLOWED_TRANSITIONS[order.status] || [];
             return (
               <tr key={order._id}>
-                <td>{order.customer.name}<br /><small>{order.customer.email}</small></td>
-                <td>
-                  {order.items.map((item) => (
-                    <div key={item.food}>{item.name} × {item.quantity}</div>
-                  ))}
-                </td>
+                <td>{order.customer.name}<br /><small style={{ color: 'var(--color-muted)' }}>{order.customer.email}</small></td>
+                <td>{order.items.map((item) => <div key={item.food}>{item.name} × {item.quantity}</div>)}</td>
                 <td>{formatCurrency(order.totalAmount)}</td>
-                <td>{order.status}</td>
+                <td><span className="admin-badge admin-badge--available">{order.status}</span></td>
                 <td>
-                  {nextOptions.length === 0 ? (
-                    <span>—</span>
-                  ) : (
+                  {nextOptions.length === 0 ? '—' : (
                     <select
                       defaultValue=""
                       disabled={updatingId === order._id}
-                      onChange={(e) => {
-                        if (e.target.value) handleStatusChange(order._id, e.target.value);
-                      }}
+                      onChange={(e) => e.target.value && handleStatusChange(order._id, e.target.value)}
+                      className="admin-select"
                     >
                       <option value="" disabled>Change to...</option>
-                      {nextOptions.map((status) => (
-                        <option key={status} value={status}>{status}</option>
-                      ))}
+                      {nextOptions.map((status) => <option key={status} value={status}>{status}</option>)}
                     </select>
                   )}
                 </td>
@@ -101,6 +89,7 @@ const ManageOrders = () => {
         </tbody>
       </table>
     </div>
+  </div>
   );
 };
 

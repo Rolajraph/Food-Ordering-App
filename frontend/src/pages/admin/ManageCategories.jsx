@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import { getCategoriesRequest, createCategoryRequest, deleteCategoryRequest } from '../../api/categoryApi';
+import { formatCurrency } from '../../utils/formatCurrency';
+import '../../styles/forms.css';
+import '../../styles/admin.css';
 
 const initialFormState = { name: '', image: '' };
 
@@ -63,47 +66,43 @@ const ManageCategories = () => {
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
-    <div>
-      <h1>Manage Categories</h1>
+  <div className="admin-page">
+    <h1>Manage Categories</h1>
 
-      <h2>Add New Category</h2>
-      <form onSubmit={handleCreate}>
-        <div>
-          <label htmlFor="name">Name</label>
-          <input id="name" name="name" value={formData.name} onChange={handleChange} required />
-        </div>
-        <div>
-          <label htmlFor="image">Image URL (optional)</label>
-          <input id="image" name="image" value={formData.image} onChange={handleChange} />
-        </div>
-        {formError && <p style={{ color: 'red' }}>{formError}</p>}
-        <button type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Adding...' : 'Add Category'}
-        </button>
-      </form>
+    <h2>Add New Category</h2>
+    <form onSubmit={handleCreate} className="admin-form">
+      <div className="form-field">
+        <label htmlFor="name">Name</label>
+        <input id="name" name="name" value={formData.name} onChange={handleChange} required />
+      </div>
+      <div className="form-field">
+        <label htmlFor="image">Image URL (optional)</label>
+        <input id="image" name="image" value={formData.image} onChange={handleChange} />
+      </div>
+      {formError && <p className="form-error">{formError}</p>}
+      <button type="submit" disabled={isSubmitting} className="form-submit-btn">
+        {isSubmitting ? 'Adding...' : 'Add Category'}
+      </button>
+    </form>
 
-      <h2>Existing Categories ({categories.length})</h2>
-      <table border="1" cellPadding="8" style={{ borderCollapse: 'collapse', width: '100%' }}>
+    <h2>Existing Categories ({categories.length})</h2>
+    <div className="admin-table-wrap">
+      <table className="admin-table">
         <thead>
-          <tr>
-            <th>Name</th>
-            <th>Image</th>
-            <th>Actions</th>
-          </tr>
+          <tr><th>Name</th><th>Image</th><th>Actions</th></tr>
         </thead>
         <tbody>
           {categories.map((cat) => (
             <tr key={cat._id}>
               <td>{cat.name}</td>
-              <td>{cat.image ? <img src={cat.image} alt={cat.name} style={{ width: '50px', height: '50px', objectFit: 'cover' }} /> : '—'}</td>
-              <td>
-                <button onClick={() => handleDelete(cat._id)}>Delete</button>
-              </td>
+              <td>{cat.image ? <img src={cat.image} alt={cat.name} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: 'var(--radius-sm)' }} /> : '—'}</td>
+              <td><button onClick={() => handleDelete(cat._id)} className="admin-btn admin-btn--danger">Delete</button></td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
+  </div>
   );
 };
 

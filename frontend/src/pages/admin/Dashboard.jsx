@@ -3,6 +3,7 @@ import { getAllOrdersRequest } from '../../api/orderApi';
 import { getFoodsRequest } from '../../api/foodApi';
 import { getUsersRequest } from '../../api/authApi';
 import { formatCurrency } from '../../utils/formatCurrency';
+import '../../styles/admin.css';
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
@@ -51,55 +52,51 @@ const Dashboard = () => {
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-        <div style={{ border: '1px solid #e5e5e5', padding: '1rem', flex: 1 }}>
-          <h3>Total Orders</h3>
-          <p style={{ fontSize: '1.5rem' }}>{stats.totalOrders}</p>
-        </div>
-        <div style={{ border: '1px solid #e5e5e5', padding: '1rem', flex: 1 }}>
-          <h3>Total Revenue</h3>
-          <p style={{ fontSize: '1.5rem' }}>{formatCurrency(stats.totalRevenue)}</p>
-        </div>
-        <div style={{ border: '1px solid #e5e5e5', padding: '1rem', flex: 1 }}>
-          <h3>Total Customers</h3>
-          <p style={{ fontSize: '1.5rem' }}>{stats.totalCustomers}</p>
-        </div>
-        <div style={{ border: '1px solid #e5e5e5', padding: '1rem', flex: 1 }}>
-          <h3>Total Foods</h3>
-          <p style={{ fontSize: '1.5rem' }}>{stats.totalFoods}</p>
-        </div>
+  <div className="admin-page">
+    <h1>Dashboard</h1>
+    <div className="admin-stats">
+      <div className="admin-stat-card">
+        <h3>Total Orders</h3>
+        <p>{stats.totalOrders}</p>
       </div>
+      <div className="admin-stat-card">
+        <h3>Total Revenue</h3>
+        <p>{formatCurrency(stats.totalRevenue)}</p>
+      </div>
+      <div className="admin-stat-card">
+        <h3>Total Customers</h3>
+        <p>{stats.totalCustomers}</p>
+      </div>
+      <div className="admin-stat-card">
+        <h3>Total Foods</h3>
+        <p>{stats.totalFoods}</p>
+      </div>
+    </div>
 
-      <h2>Recent Orders</h2>
-      {recentOrders.length === 0 ? (
-        <p>No orders yet.</p>
-      ) : (
-        <table border="1" cellPadding="8" style={{ borderCollapse: 'collapse', width: '100%' }}>
+    <h2>Recent Orders</h2>
+    {recentOrders.length === 0 ? (
+      <p>No orders yet.</p>
+    ) : (
+      <div className="admin-table-wrap">
+        <table className="admin-table">
           <thead>
-            <tr>
-              <th>Customer</th>
-              <th>Total</th>
-              <th>Status</th>
-              <th>Date</th>
-            </tr>
+            <tr><th>Customer</th><th>Total</th><th>Status</th><th>Date</th></tr>
           </thead>
           <tbody>
             {recentOrders.map((order) => (
               <tr key={order._id}>
                 <td>{order.customer.name}</td>
                 <td>{formatCurrency(order.totalAmount)}</td>
-                <td>{order.status}</td>
+                <td><span className="admin-badge admin-badge--available">{order.status}</span></td>
                 <td>{new Date(order.createdAt).toLocaleDateString()}</td>
               </tr>
             ))}
           </tbody>
         </table>
-      )}
-    </div>
-  );
+      </div>
+    )}
+  </div>
+ );
 };
 
 export default Dashboard;
