@@ -12,17 +12,17 @@ import OrderConfirmation from "../pages/public/OrderConfirmation";
 import ManageFoods from "../pages/admin/ManageFoods";
 import ManageCategories from "../pages/admin/ManageCategories";
 import ManageOrders from "../pages/admin/ManageOrders";
-import App from "../App";
 import Dashboard from "../pages/admin/Dashboard";
 import Profile from "../pages/protected/Profile";
 import OrderHistory from "../pages/protected/OrderHistory";
 import NotFound from '../pages/public/NotFound';
+import Home from '../pages/public/Home';
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route element={<PublicLayout />}>
-        <Route path="/" element={<App />} />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/menu" element={<Menu />} />

@@ -1,21 +1,26 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { getFoodsRequest } from '../../api/foodApi';
 import useCart from '../../hooks/useCart';
 import { formatCurrency } from '../../utils/formatCurrency';
 import './Menu.css';
 
 const Menu = () => {
+  const [searchParams] = useSearchParams();
   const [foods, setFoods] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState('');
   const { addItem } = useCart();
+
+  const category = searchParams.get('category') || '';
+  const search = searchParams.get('search') || '';
 
   useEffect(() => {
     const fetchFoods = async () => {
       setIsLoading(true);
       setError('');
       try {
-        const response = await getFoodsRequest();
+        const response = await getFoodsRequest({ category, search });
         setFoods(response.data.data.foods);
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to load menu. Please try again.');
@@ -25,7 +30,7 @@ const Menu = () => {
     };
 
     fetchFoods();
-  }, []);
+  }, [category, search]);
 
   if (isLoading) return <p>Loading menu...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
@@ -33,6 +38,7 @@ const Menu = () => {
   return (
     <div className="menu">
       <h1 className="brush-underline">Menu</h1>
+      {search && <p style={{ color: 'var(--color-muted)', marginTop: 'var(--space-2)' }}>Showing results for "{search}"</p>}
       {foods.length === 0 ? (
         <p>No food items available right now.</p>
       ) : (
