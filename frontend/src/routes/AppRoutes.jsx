@@ -16,6 +16,7 @@ import App from "../App";
 import Dashboard from "../pages/admin/Dashboard";
 import Profile from "../pages/protected/Profile";
 import OrderHistory from "../pages/protected/OrderHistory";
+import NotFound from '../pages/public/NotFound';
 
 const AppRoutes = () => {
   return (
@@ -26,6 +27,7 @@ const AppRoutes = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/menu" element={<Menu />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="*" element={<NotFound />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/checkout" element={<Checkout />} />
