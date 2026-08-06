@@ -11,7 +11,11 @@ export const getFood = async (req, res) => {
 };
 
 export const createFood = async (req, res) => {
-  const food = await foodService.createFood(req.body);
+  const foodData = { ...req.body };
+  if (req.file) {
+    foodData.image = req.file.path; // Cloudinary URL
+  }
+  const food = await foodService.createFood(foodData);
   res.status(201).json({
     success: true,
     message: 'Food item created successfully',
@@ -20,7 +24,11 @@ export const createFood = async (req, res) => {
 };
 
 export const updateFood = async (req, res) => {
-  const food = await foodService.updateFood(req.params.id, req.body);
+  const foodData = { ...req.body };
+  if (req.file) {
+    foodData.image = req.file.path;
+  }
+  const food = await foodService.updateFood(req.params.id, foodData);
   res.status(200).json({
     success: true,
     message: 'Food item updated successfully',

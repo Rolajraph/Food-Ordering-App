@@ -11,7 +11,11 @@ export const getCategory = async (req, res) => {
 };
 
 export const createCategory = async (req, res) => {
-  const category = await categoryService.createCategory(req.body);
+  const categoryData = { ...req.body };
+  if (req.file) {
+    categoryData.image = req.file.path;
+  }
+  const category = await categoryService.createCategory(categoryData);
   res.status(201).json({
     success: true,
     message: 'Category created successfully',
@@ -20,7 +24,11 @@ export const createCategory = async (req, res) => {
 };
 
 export const updateCategory = async (req, res) => {
-  const category = await categoryService.updateCategory(req.params.id, req.body);
+  const categoryData = { ...req.body };
+  if (req.file) {
+    categoryData.image = req.file.path;
+  }
+  const category = await categoryService.updateCategory(req.params.id, categoryData);
   res.status(200).json({
     success: true,
     message: 'Category updated successfully',
