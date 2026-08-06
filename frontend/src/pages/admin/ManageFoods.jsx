@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { getFoodsRequest, createFoodRequest, deleteFoodRequest, updateFoodRequest } from '../../api/foodApi';
+import { getFoodsRequest, createFoodRequest, updateFoodRequest, deleteFoodRequest } from '../../api/foodApi';
 import { getCategoriesRequest } from '../../api/categoryApi';
 import { formatCurrency } from '../../utils/formatCurrency';
+import '../../styles/forms.css';
 import '../../styles/admin.css';
-
 
 const initialFormState = {
   name: '',
@@ -19,6 +19,8 @@ const ManageFoods = () => {
   const [error, setError] = useState('');
 
   const [formData, setFormData] = useState(initialFormState);
+  const [imageFile, setImageFile] = useState(null);
+  const [editingId, setEditingId] = useState(null);
   const [formError, setFormError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -47,24 +49,58 @@ const ManageFoods = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleCreate = async (e) => {
+  const handleFileChange = (e) => {
+    setImageFile(e.target.files[0]);
+  };
+
+  const startEdit = (food) => {
+    setEditingId(food._id);
+    setFormData({
+      name: food.name,
+      description: food.description,
+      price: food.price,
+      category: food.category._id,
+    });
+    setImageFile(null);
+    setFormError('');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setFormData(initialFormState);
+    setImageFile(null);
+    setFormError('');
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError('');
     setIsSubmitting(true);
 
+    const submitData = new FormData();
+    submitData.append('name', formData.name);
+    submitData.append('description', formData.description);
+    submitData.append('price', formData.price);
+    submitData.append('category', formData.category);
+    if (imageFile) {
+      submitData.append('image', imageFile);
+    }
+
     try {
-      await createFoodRequest({
-        ...formData,
-        price: Number(formData.price),
-      });
-      setFormData(initialFormState);
+      if (editingId) {
+        await updateFoodRequest(editingId, submitData);
+      } else {
+        await createFoodRequest(submitData);
+      }
+      cancelEdit();
       await loadData();
     } catch (err) {
       const backendErrors = err.response?.data?.errors;
       if (backendErrors?.length) {
         setFormError(backendErrors.map((e) => e.message).join(', '));
       } else {
-        setFormError(err.response?.data?.message || 'Failed to create food item.');
+        setFormError(err.response?.data?.message || 'Failed to save food item.');
       }
     } finally {
       setIsSubmitting(false);
@@ -94,65 +130,75 @@ const ManageFoods = () => {
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
   return (
-  <div className="admin-page">
-    <h1>Manage Foods</h1>
+    <div className="admin-page">
+      <h1>Manage Foods</h1>
 
-    <h2>Add New Food</h2>
-    <form onSubmit={handleCreate} className="admin-form">
-      <div className="form-field">
-        <label htmlFor="name">Name</label>
-        <input id="name" name="name" value={formData.name} onChange={handleChange} required />
-      </div>
-      <div className="form-field">
-        <label htmlFor="description">Description</label>
-        <textarea id="description" name="description" value={formData.description} onChange={handleChange} required />
-      </div>
-      <div className="form-field">
-        <label htmlFor="price">Price</label>
-        <input id="price" name="price" type="number" step="0.01" min="0" value={formData.price} onChange={handleChange} required />
-      </div>
-      <div className="form-field">
-        <label htmlFor="category">Category</label>
-        <select id="category" name="category" value={formData.category} onChange={handleChange} required>
-          <option value="">Select a category</option>
-          {categories.map((cat) => <option key={cat._id} value={cat._id}>{cat.name}</option>)}
-        </select>
-      </div>
-      {formError && <p className="form-error">{formError}</p>}
-      <button type="submit" disabled={isSubmitting} className="form-submit-btn">
-        {isSubmitting ? 'Adding...' : 'Add Food'}
-      </button>
-    </form>
+      <h2>{editingId ? 'Edit Food' : 'Add New Food'}</h2>
+      <form onSubmit={handleSubmit} className="admin-form">
+        <div className="form-field">
+          <label htmlFor="name">Name</label>
+          <input id="name" name="name" value={formData.name} onChange={handleChange} required />
+        </div>
+        <div className="form-field">
+          <label htmlFor="description">Description</label>
+          <textarea id="description" name="description" value={formData.description} onChange={handleChange} required />
+        </div>
+        <div className="form-field">
+          <label htmlFor="price">Price</label>
+          <input id="price" name="price" type="number" step="0.01" min="0" value={formData.price} onChange={handleChange} required />
+        </div>
+        <div className="form-field">
+          <label htmlFor="category">Category</label>
+          <select id="category" name="category" value={formData.category} onChange={handleChange} required>
+            <option value="">Select a category</option>
+            {categories.map((cat) => <option key={cat._id} value={cat._id}>{cat.name}</option>)}
+          </select>
+        </div>
+        <div className="form-field">
+          <label htmlFor="image">Image {editingId && '(leave blank to keep current)'}</label>
+          <input id="image" name="image" type="file" accept="image/*" onChange={handleFileChange} />
+        </div>
+        {formError && <p className="form-error">{formError}</p>}
+        <button type="submit" disabled={isSubmitting} className="form-submit-btn">
+          {isSubmitting ? 'Saving...' : editingId ? 'Update Food' : 'Add Food'}
+        </button>
+        {editingId && (
+          <button type="button" onClick={cancelEdit} className="admin-btn">
+            Cancel
+          </button>
+        )}
+      </form>
 
-    <h2>Existing Foods ({foods.length})</h2>
-    <div className="admin-table-wrap">
-      <table className="admin-table">
-        <thead>
-          <tr><th>Name</th><th>Category</th><th>Price</th><th>Available</th><th>Actions</th></tr>
-        </thead>
-        <tbody>
-          {foods.map((food) => (
-            <tr key={food._id}>
-              <td>{food.name}</td>
-              <td>{food.category.name}</td>
-              <td>{formatCurrency(food.price)}</td>
-              <td>
-                <button
-                  onClick={() => handleToggleAvailability(food)}
-                  className={`admin-badge ${food.isAvailable ? 'admin-badge--available' : 'admin-badge--unavailable'}`}
-                >
-                  {food.isAvailable ? 'Available' : 'Unavailable'}
-                </button>
-              </td>
-              <td>
-                <button onClick={() => handleDelete(food._id)} className="admin-btn admin-btn--danger">Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <h2>Existing Foods ({foods.length})</h2>
+      <div className="admin-table-wrap">
+        <table className="admin-table">
+          <thead>
+            <tr><th>Name</th><th>Category</th><th>Price</th><th>Available</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            {foods.map((food) => (
+              <tr key={food._id}>
+                <td>{food.name}</td>
+                <td>{food.category.name}</td>
+                <td>{formatCurrency(food.price)}</td>
+                <td>
+                  <button
+                    onClick={() => handleToggleAvailability(food)}
+                    className={`admin-badge ${food.isAvailable ? 'admin-badge--available' : 'admin-badge--unavailable'}`}
+                  >
+                    {food.isAvailable ? 'Available' : 'Unavailable'}
+                  </button>
+                </td>
+                <td>
+                  <button onClick={() => startEdit(food)} className="admin-btn">Edit</button>{' '}
+                  <button onClick={() => handleDelete(food._id)} className="admin-btn admin-btn--danger">Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
   );
 };
 
