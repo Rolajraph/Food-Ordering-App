@@ -1,15 +1,17 @@
-import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import "../../styles/forms.css";
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
+import useToast from '../../hooks/useToast';
+import '../../styles/forms.css';
 
 const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
+  const { showToast } = useToast();
 
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
@@ -18,16 +20,15 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
+    setError('');
     setIsSubmitting(true);
 
     try {
       await login(formData);
-      navigate("/");
+      showToast('Welcome back!');
+      navigate('/');
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Login failed. Please try again.",
-      );
+      setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -53,7 +54,7 @@ const Login = () => {
           <input
             id="password"
             name="password"
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             value={formData.password}
             onChange={handleChange}
             required
@@ -63,16 +64,12 @@ const Login = () => {
             className="password-toggle-btn"
             onClick={() => setShowPassword((prev) => !prev)}
           >
-            {showPassword ? "Hide" : "Show"}
+            {showPassword ? 'Hide' : 'Show'}
           </button>
         </div>
         {error && <p className="form-error">{error}</p>}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="form-submit-btn"
-        >
-          {isSubmitting ? "Logging in..." : "Login"}
+        <button type="submit" disabled={isSubmitting} className="form-submit-btn">
+          {isSubmitting ? 'Logging in...' : 'Login'}
         </button>
       </form>
       <p className="auth-page__footer">

@@ -43,3 +43,32 @@ textarea:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
+
+.toast {
+  position: fixed;
+  bottom: var(--space-6);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--space-3) var(--space-6);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  z-index: 100;
+  animation: toast-in 0.2s ease;
+}
+
+.toast--success {
+  background: var(--color-accent);
+  color: var(--color-surface);
+}
+
+.toast--error {
+  background: var(--color-danger);
+  color: var(--color-surface);
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
