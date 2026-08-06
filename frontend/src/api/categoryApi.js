@@ -4,12 +4,16 @@ export const getCategoriesRequest = () => {
   return axiosInstance.get('/categories');
 };
 
-export const createCategoryRequest = (data) => {
-  return axiosInstance.post('/categories', data);
+export const createCategoryRequest = (formData) => {
+  return axiosInstance.post('/categories', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
 };
 
-export const updateCategoryRequest = (id, data) => {
-  return axiosInstance.put(`/categories/${id}`, data);
+export const updateCategoryRequest = (id, formData) => {
+  return axiosInstance.put(`/categories/${id}`, formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
 };
 
 export const deleteCategoryRequest = (id) => {
