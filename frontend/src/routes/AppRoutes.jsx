@@ -17,6 +17,7 @@ import Profile from "../pages/protected/Profile";
 import OrderHistory from "../pages/protected/OrderHistory";
 import NotFound from '../pages/public/NotFound';
 import Home from '../pages/public/Home';
+import FoodDetails from '../pages/public/FoodDetails';
 
 const AppRoutes = () => {
   return (
@@ -28,6 +29,7 @@ const AppRoutes = () => {
         <Route path="/menu" element={<Menu />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/food/:id" element={<FoodDetails />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/checkout" element={<Checkout />} />
