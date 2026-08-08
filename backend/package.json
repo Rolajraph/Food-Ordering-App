@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "REST API for a full-stack food ordering application",
+  "description": "REST API for QuickBite, a full-stack food ordering application",
   "main": "server.js",
   "type": "module",
   "scripts": {
